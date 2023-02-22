@@ -1,3 +1,4 @@
 export interface Props {
-    props: Number|String;
+    mainString: string;
+    result: number|string;
 }

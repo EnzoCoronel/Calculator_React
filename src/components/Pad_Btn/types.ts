@@ -1,4 +1,15 @@
+type Calc = {
+  displayedString: string;
+  sign: string[];
+  nums: string[];
+  result: number;
+};
+
 export interface Props {
-    props: string;
-    setPressed: React.Dispatch<React.SetStateAction<string>>;
+  input: string;
+  calc: Calc;
+
+  setCalc: React.Dispatch<
+    React.SetStateAction<Calc>
+  >;
 }

@@ -4,13 +4,13 @@ import Pad_Btn from "./components/Pad_Btn/Pad_Btn";
 
 const buttons = [
   "AC",
-  "()",
+  "+-",
   "%",
   "÷",
   "7",
   "8",
   "9",
-  "X",
+  "x",
   "4",
   "5",
   "6",
@@ -21,22 +21,33 @@ const buttons = [
   "+",
   "0",
   ",",
-  "x",
+  "<-",
   "=",
 ];
 
 function App() {
-  const [pressed, setPressed] = useState("");
+  const [calc, setCalc] = useState({
+    displayedString: "0",
+    sign: [""],
+    nums: [""],
+    result: 0,
+  });
 
   return (
     <div>
       <header className="text-right mr-6">
         <p>Options</p>
       </header>
-      <Display props={pressed} />
+      <Display mainString={calc.displayedString} result={calc.result}/>
       <div className="grid grid-cols-4 absolute w-screen h-1/2 bottom-0 border-t-2">
-        {buttons.map((element: string) => {
-          return <Pad_Btn props={element} setPressed={setPressed} />;
+        {buttons.map((btnType: string) => {
+          return (
+            <Pad_Btn
+              input={btnType}
+              calc={calc}
+              setCalc={setCalc}
+            />
+          );
         })}
       </div>
     </div>
