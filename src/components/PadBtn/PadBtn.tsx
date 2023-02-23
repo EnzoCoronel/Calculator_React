@@ -2,7 +2,13 @@ import React from "react";
 import { Props } from "./types";
 import { Calc } from "./types";
 
-const PadBtn: React.FC<Props> = ({ input, calc, setCalc }) => {
+const PadBtn: React.FC<Props> = ({
+  input,
+  calc,
+  setCalc,
+  pastEquations,
+  setPastEquations,
+}) => {
   const updateCalculationState = () => {
     let newCalc = { ...calc };
 
@@ -13,21 +19,31 @@ const PadBtn: React.FC<Props> = ({ input, calc, setCalc }) => {
         nums: [""],
         result: 0,
       });
+      setPastEquations([]);
       return;
     }
 
     if (input === "=") {
+      setPastEquations(
+        pastEquations.concat(
+          <div key={pastEquations.length}>
+            <p>{newCalc.displayedString}</p>
+            <p>= {newCalc.result}</p>
+          </div>
+        )
+      );
       return;
     }
 
     if (input === "<-") {
       newCalc.displayedString = newCalc.displayedString.slice(0, -1);
+      if (newCalc.displayedString === "") newCalc.displayedString = "0";
       getCalculation(newCalc);
       setCalc(newCalc);
       return;
     }
 
-    if (newCalc.displayedString.charAt(0) === "0")
+    if (newCalc.displayedString.charAt(0) === "0" && isNumber(input))
       newCalc.displayedString = newCalc.displayedString.slice(0, -1); //clear first zero
 
     let lastInputNum = newCalc.nums[newCalc.nums.length - 1];
@@ -38,9 +54,9 @@ const PadBtn: React.FC<Props> = ({ input, calc, setCalc }) => {
     setCalc(newCalc);
   };
 
-  // const isNumber = (str: string) => {
-  //   return !isNaN(parseFloat(str));
-  // };
+  const isNumber = (str: string) => {
+    return !isNaN(parseFloat(str));
+  };
 
   const getCalculation = (newCalc: Calc) => {
     let signsString;

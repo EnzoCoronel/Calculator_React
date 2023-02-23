@@ -11,15 +11,29 @@ const Calculator = () => {
     result: 0,
   });
 
+  const [pastEquations, setPastEquations] = useState([<></>]);
+
   return (
     <div>
       <header className="header">
         <p>Options</p>
       </header>
-      <Display mainString={calc.displayedString} result={calc.result} />
+      <Display
+        mainString={calc.displayedString}
+        result={calc.result}
+        pastEquations={pastEquations}
+      />
       <div className="PadBtnGrid">
-        {buttons.map((btnType: string) => {
-          return <PadBtn input={btnType} calc={calc} setCalc={setCalc} />;
+        {buttons.map((btnRole: string) => {
+          return (
+            <PadBtn
+              input={btnRole}
+              calc={calc}
+              setCalc={setCalc}
+              pastEquations={pastEquations}
+              setPastEquations={setPastEquations}
+            />
+          );
         })}
       </div>
     </div>
