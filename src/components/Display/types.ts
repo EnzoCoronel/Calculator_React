@@ -1,3 +1,4 @@
-export interface Props {
-    props: Number|String;
+export interface CalcInfo {
+    mainString: string;
+    result: number|string;
 }
