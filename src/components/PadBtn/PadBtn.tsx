@@ -1,22 +1,16 @@
 import React from "react";
 import { Props } from "./types";
+import { Calc } from "./types";
 
-type Calc = {
-  displayedString: string;
-  sign: string[];
-  nums: string[];
-  result: number;
-};
-
-const Pad_Btn: React.FC<Props> = ({ input, calc, setCalc }) => {
-  const doBtnRole = () => {
+const PadBtn: React.FC<Props> = ({ input, calc, setCalc }) => {
+  const updateCalculationState = () => {
     let newCalc = { ...calc };
 
     if (input === "AC") {
       setCalc({
         displayedString: "0",
-        sign: [],
-        nums: [],
+        sign: [""],
+        nums: [""],
         result: 0,
       });
       return;
@@ -65,10 +59,10 @@ const Pad_Btn: React.FC<Props> = ({ input, calc, setCalc }) => {
   };
 
   return (
-    <button onClick={doBtnRole} className="text-2xl">
+    <button onClick={updateCalculationState} className="text-2xl">
       {input.toString()}
     </button>
   );
 };
 
-export default Pad_Btn;
+export default PadBtn;

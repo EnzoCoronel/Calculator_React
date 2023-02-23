@@ -1,4 +1,4 @@
-type Calc = {
+export type Calc = {
   displayedString: string;
   sign: string[];
   nums: string[];

@@ -1,15 +1,15 @@
 import React from "react";
-import { Props } from "./types";
+import { CalcInfo } from "./types";
 
-const Display: React.FC<Props> = ({ mainString, result }) => {
+const Display: React.FC<CalcInfo> = ({ mainString, result }) => {
   if (result.toString().length > 8) {
     result = "ERR";
   }
 
   return (
-    <div className="align-text-bottom absolute w-screen h-1/2">
-      <p className="absolute bottom-24 right-8 text-3xl">{result.toString()}</p>
-      <p className="absolute bottom-8 right-8 text-5xl"> {mainString.toString()}</p>
+    <div className="upperDisplay">
+      <p className="result">{result.toString()}</p>
+      <p className="equation"> {mainString.toString()}</p>
     </div>
   );
 };
