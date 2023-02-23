@@ -30,8 +30,8 @@ const PadBtn: React.FC<Props> = ({ input, calc, setCalc }) => {
     if (newCalc.displayedString.charAt(0) === "0")
       newCalc.displayedString = newCalc.displayedString.slice(0, -1); //clear first zero
 
-    let lastInputNum = newCalc.nums[newCalc.nums.length - 1];
-    if (lastInputNum.length < 8) newCalc.displayedString += input; //need improvement
+      let isLessThan8 = newCalc.nums[newCalc.nums.length - 1].length < 8;
+      if (isLessThan8) newCalc.displayedString += input; //need improvement
 
     getCalculation(newCalc);
     console.log(newCalc);
