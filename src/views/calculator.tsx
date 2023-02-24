@@ -16,20 +16,14 @@ const Calculator = () => {
       <header className="header">
         <p>Options</p>
       </header>
-      <Display mainString={calc.displayedString} result={calc.result}/>
+      <Display mainString={calc.displayedString} result={calc.result} />
       <div className="PadBtnGrid">
         {buttons.map((btnType: string) => {
-          return (
-            <PadBtn
-              input={btnType}
-              calc={calc}
-              setCalc={setCalc}
-            />
-          );
+          return <PadBtn input={btnType} calc={calc} setCalc={setCalc} />;
         })}
       </div>
     </div>
   );
-}
+};
 
 export default Calculator;
