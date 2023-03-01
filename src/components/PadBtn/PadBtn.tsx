@@ -83,7 +83,6 @@ const PadBtn: React.FC<Props> = ({
 
     newCalc.displayedString = mainString;
     getCalculation(newCalc);
-    console.log(newCalc);
     setCalc(newCalc);
   };
 
@@ -122,7 +121,6 @@ const PadBtn: React.FC<Props> = ({
   };
 
   const getResult = (a: number, b: number, operation: string) => {
-    console.log(`a: ${a} b: ${b}`);
     switch (operation) {
       case "+":
         a += b;
