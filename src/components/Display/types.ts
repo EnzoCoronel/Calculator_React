@@ -1,4 +1,5 @@
 export interface CalcInfo {
-    mainString: string;
-    result: number|string;
+  mainString: string;
+  result: number | string;
+  pastEquations: JSX.Element[];
 }

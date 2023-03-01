@@ -1,10 +1,7 @@
 import Calculator from "./views/calculator";
 
 function App() {
-
-  return (
-    <Calculator/>
-  );
+  return <Calculator />;
 }
 
 export default App;
