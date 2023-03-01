@@ -24,7 +24,7 @@ const Calculator = () => {
         pastEquations={pastEquations}
       />
       <div className="PadBtnGrid">
-        {buttons.map((btnRole: string, index) => {
+        {buttons.map((btnRole, index) => {
           return (
             <PadBtn
               key={index}
