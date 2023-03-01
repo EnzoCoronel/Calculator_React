@@ -104,6 +104,11 @@ const PadBtn: React.FC<Props> = ({
     signsString = mainString.replace(/[0-9.]/g, "");
     newCalc.sign = signsString.split("");
 
+    let doFirst = newCalc.sign.findIndex(
+      (element) => element === "x" || element === "÷"
+    );
+    equation(doFirst, newCalc);
+
     newCalc.nums.forEach((element, index) => {
       if (newCalc.sign[index] === "%") {
         mainString = mainString.slice(0, -element.length);
@@ -113,6 +118,7 @@ const PadBtn: React.FC<Props> = ({
       }
 
       newCalc.displayedString = mainString;
+
       newCalc.result = getResult(
         newCalc.result,
         parseFloat(element),
@@ -141,6 +147,26 @@ const PadBtn: React.FC<Props> = ({
         break;
     }
     return a;
+  };
+
+  const equation = (doFirst: number, newCalc: Calc) => {
+    console.log(doFirst);
+    if (doFirst !== -1 && newCalc.nums[doFirst + 1]) {
+      newCalc.nums[doFirst + 1] = getResult(
+        parseFloat(newCalc.nums[doFirst]),
+        parseFloat(newCalc.nums[doFirst + 1]),
+        newCalc.sign[doFirst]
+      ).toString();
+
+      newCalc.nums.splice(doFirst, doFirst);
+      newCalc.sign.splice(doFirst, doFirst);
+
+      doFirst = newCalc.sign.findIndex(
+        (element) => element === "x" || element === "÷"
+      );
+      if (doFirst === -1) return;
+      equation(doFirst, newCalc);
+    }
   };
 
   const makeItPercentage = (mainValue: number, percentageStr: string) => {
