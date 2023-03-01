@@ -11,6 +11,7 @@ const PadBtn: React.FC<Props> = ({
 }) => {
   const updateCalculationState = () => {
     let newCalc = { ...calc };
+    let mainString = newCalc.displayedString;
 
     if (input === "AC") {
       setCalc({
@@ -24,26 +25,25 @@ const PadBtn: React.FC<Props> = ({
     }
 
     if (input === "=") {
-      if (newCalc.result === 0)
-        newCalc.result = parseFloat(newCalc.displayedString);
+      if (newCalc.result === 0) newCalc.result = parseFloat(mainString);
       setPastEquations(
         pastEquations.concat(
           <div key={pastEquations.length} className="history">
-            <p>{newCalc.displayedString}</p>
+            <p>{mainString}</p>
             <p>= {newCalc.result}</p>
           </div>
         )
       );
-      if (newCalc.result !== 0)
-        newCalc.displayedString = newCalc.result.toString();
+      if (newCalc.result !== 0) mainString = newCalc.result.toString();
       newCalc.result = 0;
       setCalc(newCalc);
       return;
     }
 
     if (input === "<-") {
-      newCalc.displayedString = newCalc.displayedString.slice(0, -1);
-      if (newCalc.displayedString === "") newCalc.displayedString = "0";
+      mainString = mainString.slice(0, -1);
+      if (mainString === "") mainString = "0";
+      newCalc.displayedString = mainString;
       getCalculation(newCalc);
       setCalc(newCalc);
       return;
@@ -51,12 +51,37 @@ const PadBtn: React.FC<Props> = ({
 
     if (input === ",") input = ".";
 
-    if (newCalc.displayedString.charAt(0) === "0" && isNumber(input))
-      newCalc.displayedString = newCalc.displayedString.slice(0, -1); //clear first zero
+    if (
+      !isNumber(mainString.charAt(mainString.length - 1)) &&
+      !isNumber(input)
+    ) {
+      mainString = mainString.slice(0, -1);
+    }
+
+    if (mainString.slice(-1) === "0" && isNumber(input))
+      mainString = mainString.slice(0, -1); //clear first zero
 
     let isLessThan8 = newCalc.nums[newCalc.nums.length - 1].length < 8;
-    if (isLessThan8) newCalc.displayedString += input; //need improvement
+    if (isLessThan8) mainString += input; //need improvement
 
+    if (input === "±") {
+      //to fix: negative first input makes the equation be a subtraction
+      let toInvertNumber = newCalc.nums[newCalc.nums.length - 1];
+      mainString = mainString.slice(0, -1);
+      if (newCalc.sign[newCalc.sign.length - 1] === "-") {
+        mainString = mainString.replace(/-([^-]*)$/, "+" + "$1");
+        newCalc.sign[newCalc.sign.length - 1] = "+";
+      } else if (newCalc.sign[newCalc.sign.length - 1] === "+") {
+        mainString = mainString.replace(/\+([^+]*)$/, "-" + "$1");
+        newCalc.sign[newCalc.sign.length - 1] = "-";
+      } else {
+        toInvertNumber = (parseFloat(toInvertNumber) * -1).toString();
+        mainString = mainString.slice(0, -toInvertNumber.length);
+        mainString = mainString.concat(toInvertNumber);
+      }
+    }
+
+    newCalc.displayedString = mainString;
     getCalculation(newCalc);
     console.log(newCalc);
     setCalc(newCalc);
@@ -71,22 +96,23 @@ const PadBtn: React.FC<Props> = ({
     newCalc.nums = [];
     newCalc.result = 0;
 
-    newCalc.nums = newCalc.displayedString.split(/[+x÷+-]/);
-    if (newCalc.nums[newCalc.nums.length - 1] === "") newCalc.nums.pop();
+    let mainString = newCalc.displayedString;
 
-    signsString = newCalc.displayedString.replace(/[0-9.]/g, "");
+    newCalc.nums = mainString.split(/[+x÷\±-]/);
+    newCalc.nums = newCalc.nums.filter((str) => str !== "");
+
+    signsString = mainString.replace(/[0-9.]/g, "");
     newCalc.sign = signsString.split("");
 
     newCalc.nums.forEach((element, index) => {
       if (newCalc.sign[index] === "%") {
-        newCalc.displayedString = newCalc.displayedString.slice(
-          0,
-          -element.length
-        );
+        mainString = mainString.slice(0, -element.length);
         if (index === 0) element = makeItPercentage(1, element);
         else element = makeItPercentage(newCalc.result, element);
-        newCalc.displayedString = newCalc.displayedString.concat(element);
+        mainString = mainString.concat(element);
       }
+
+      newCalc.displayedString = mainString;
       newCalc.result = getResult(
         newCalc.result,
         parseFloat(element),
@@ -96,6 +122,7 @@ const PadBtn: React.FC<Props> = ({
   };
 
   const getResult = (a: number, b: number, operation: string) => {
+    console.log(`a: ${a} b: ${b}`);
     switch (operation) {
       case "+":
         a += b;
