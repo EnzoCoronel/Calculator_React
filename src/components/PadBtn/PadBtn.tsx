@@ -90,7 +90,7 @@ const PadBtn: React.FC<Props> = ({
 
     newCalc.displayedString = mainStr;
     getCalculation(newCalc);
-    console.log(newCalc);
+    //console.log(newCalc);
     setCalc(newCalc);
   };
 
@@ -171,10 +171,8 @@ const PadBtn: React.FC<Props> = ({
         newCalc.sign[signIndex]
       ).toString();
 
-      console.log(equationCalc.sign[signIndex]);
       equationCalc.nums.splice(signIndex, 1);
       equationCalc.sign.splice(signIndex, 1);
-      console.log(equationCalc.sign[signIndex]);
 
       signIndex = equationCalc.sign.findIndex(
         (element) => element === "x" || element === "÷"
