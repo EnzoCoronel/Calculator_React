@@ -3,19 +3,22 @@
 @tailwind utilities;
 
 @layer components {
-    .PadBtnGrid {
-        @apply grid grid-cols-4 absolute w-screen h-1/2 bottom-0 border-t-2;
-    }
-    .header {
-        @appply text-right mr-6;
-    }
-    .upperDisplay {
-        @apply align-text-bottom absolute w-screen h-1/2;
-    }
-    .equation {
-        @apply absolute bottom-8 right-8 text-5xl;
-    }
-    .result {
-        @apply absolute bottom-24 right-8 text-3xl;
-    }
+  .PadBtnGrid {
+    @apply grid grid-cols-4 absolute w-screen h-1/2 bottom-0 border-t-2;
+  }
+  .header {
+    @apply absolute;
+  }
+  .upperDisplay {
+    @apply flex flex-col-reverse text-right overflow-auto absolute w-screen h-1/2;
+  }
+  .equation {
+    @apply text-5xl mr-6 mt-6;
+  }
+  .result {
+    @apply text-3xl mr-6;
+  }
+  .history {
+    @apply text-xl mr-6 mt-2;
+  }
 }
