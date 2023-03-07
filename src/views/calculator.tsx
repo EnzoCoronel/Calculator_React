@@ -15,9 +15,6 @@ const Calculator = () => {
 
   return (
     <div>
-      <header className="header">
-        <p>Options</p>
-      </header>
       <Display
         mainString={calc.displayedString}
         result={calc.result}

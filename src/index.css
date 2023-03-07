@@ -4,13 +4,10 @@
 
 @layer components {
   .PadBtnGrid {
-    @apply grid grid-cols-4 absolute w-screen h-1/2 bottom-0 border-t-2;
-  }
-  .header {
-    @apply absolute;
+    @apply grid grid-cols-4 absolute w-screen h-2/3 bottom-0 border-t-2 p-2 gap-1;
   }
   .upperDisplay {
-    @apply flex flex-col-reverse text-right overflow-auto absolute w-screen h-1/2;
+    @apply flex flex-col-reverse text-right overflow-auto absolute w-screen h-1/3;
   }
   .equation {
     @apply text-5xl mr-6 mt-6;
@@ -20,5 +17,8 @@
   }
   .history {
     @apply text-xl mr-6 mt-2;
+  }
+  .button{
+    @apply bg-gray-300  text-3xl rounded-full;
   }
 }

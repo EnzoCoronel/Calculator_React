@@ -24,6 +24,16 @@ const PadBtn: React.FC<Props> = ({
       return;
     }
 
+    if (input === "C") {
+      setCalc({
+        displayedString: "0",
+        sign: [""],
+        nums: [""],
+        result: 0,
+      });
+      return;
+    }
+
     if (input === "=") {
       if (newCalc.result === 0) newCalc.result = parseFloat(mainStr);
       setPastEquations(
@@ -53,12 +63,15 @@ const PadBtn: React.FC<Props> = ({
 
     if (input === ",") input = ".";
 
+    if (input === "xⁿ") input = "^";
+
     if (input === "±" && mainStr === "0") return;
 
+    let lastDigit = mainStr.charAt(mainStr.length - 1);
 
-    if (!isNumber(mainStr.charAt(mainStr.length - 1)) && !isNumber(input)) {
+    if (!isNumber(lastDigit) && !isNumber(input))
+      //if (input !== "π" && input !== "√" && lastDigit !== "π" && lastDigit !== "√")
       mainStr = mainStr.slice(0, -1);
-    }
 
     if (mainStr.slice(-1) === "0" && isNumber(input))
       mainStr = mainStr.slice(0, -1); //clear first zero
@@ -105,7 +118,7 @@ const PadBtn: React.FC<Props> = ({
 
     let mainStr = newCalc.displayedString;
 
-    newCalc.nums = mainStr.split(/[+x÷±-]/);
+    newCalc.nums = mainStr.split(/[+x÷±^√π-]/);
     newCalc.nums = newCalc.nums.filter((str) => str !== "");
 
     signsString = mainStr.replace(/[0-9.]/g, "");
@@ -115,7 +128,11 @@ const PadBtn: React.FC<Props> = ({
       newCalc.result = parseFloat("-" + newCalc.nums[0]);
     else newCalc.result = parseFloat(newCalc.nums[0]);
 
-    let signIndex = newCalc.sign.findIndex(
+    let signIndex = newCalc.sign.findIndex((element) => element === "^");
+
+    handleExponetiation(signIndex, newCalc);
+
+    signIndex = newCalc.sign.findIndex(
       (element) => element === "x" || element === "÷"
     );
 
@@ -127,6 +144,30 @@ const PadBtn: React.FC<Props> = ({
         if (index === 0) element = trasformToPercentage(1, element);
         else element = trasformToPercentage(newCalc.result, element);
         mainStr = mainStr.concat(element);
+      }
+      let elementTypeNum = parseFloat(element);
+
+      if (newCalc.sign[index] === "π") {
+        if (element !== "0") element = (elementTypeNum * 3.141).toFixed(3);
+        else element = (elementTypeNum + 3.141).toFixed(3);
+        newCalc.sign.splice(index, 1);
+        newCalc.nums[index] = element;
+        if (mainStr.charAt(0) === "0") mainStr = mainStr.slice(1);
+      }
+
+      if (newCalc.sign[index] === "√") {
+        //it does`t work with negative numbers inside the square root
+        //also, it may bug the multi/div/exponetial order
+        if (elementTypeNum !== 0) elementTypeNum = Math.sqrt(elementTypeNum);
+        else elementTypeNum = Math.sqrt(elementTypeNum);
+        elementTypeNum = parseFloat(
+          (Math.round(elementTypeNum * 100) / 100).toFixed(3)
+        );
+
+        newCalc.sign.splice(index, 1);
+        element = elementTypeNum.toString();
+        newCalc.nums[index] = elementTypeNum.toString();
+        if (mainStr.charAt(0) === "0") mainStr = mainStr.slice(1);
       }
 
       newCalc.displayedString = mainStr;
@@ -153,10 +194,36 @@ const PadBtn: React.FC<Props> = ({
       case "÷":
         a /= b;
         break;
-      default:
+      case "^":
+        a = a ** b;
+        break;
+      case "√":
+      case "π":
+        a = a;
+        break;
+      default: //should i remove this?
+        a = b;
         break;
     }
     return a;
+  };
+
+  const handleExponetiation = (signIndex: number, newCalc: Calc) => {
+    let equationCalc = { ...newCalc };
+    if (signIndex !== -1 && equationCalc.nums[signIndex + 1]) {
+      equationCalc.nums[signIndex + 1] = getResult(
+        parseFloat(equationCalc.nums[signIndex]),
+        parseFloat(equationCalc.nums[signIndex + 1]),
+        newCalc.sign[signIndex]
+      ).toString();
+
+      equationCalc.nums.splice(signIndex, 1);
+      equationCalc.sign.splice(signIndex, 1);
+
+      signIndex = equationCalc.sign.findIndex((element) => element === "^");
+      if (signIndex === -1) return;
+      handleMultiplicationsAndDivisions(signIndex, equationCalc);
+    }
   };
 
   const handleMultiplicationsAndDivisions = (
@@ -190,7 +257,12 @@ const PadBtn: React.FC<Props> = ({
   };
 
   return (
-    <button onClick={updateCalculationState} className="text-3xl">
+    <button
+      onClick={updateCalculationState}
+      className={`button ${
+        isNumber(input) ? "bg-gray-100" : input === "=" ? "bg-orange-300" : ""
+      }`}
+    >
       {input.toString()}
     </button>
   );
