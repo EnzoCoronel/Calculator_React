@@ -21,4 +21,7 @@
   .button{
     @apply bg-gray-300  text-3xl rounded-full;
   }
+  .btnPressArea{
+    @apply w-full h-full;
+  }
 }

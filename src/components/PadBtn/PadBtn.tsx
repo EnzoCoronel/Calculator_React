@@ -12,38 +12,33 @@ const PadBtn: React.FC<Props> = ({
   const updateCalculationState = () => {
     let newCalc = { ...calc };
     let mainStr = newCalc.displayedString;
+    const defaultCalcValue = {
+      displayedString: "0",
+      sign: [""],
+      nums: [""],
+      result: 0,
+    };
 
     if (input === "AC") {
-      setCalc({
-        displayedString: "0",
-        sign: [""],
-        nums: [""],
-        result: 0,
-      });
+      setCalc(defaultCalcValue);
       setPastEquations([]);
       return;
     }
 
     if (input === "C") {
-      setCalc({
-        displayedString: "0",
-        sign: [""],
-        nums: [""],
-        result: 0,
-      });
+      setCalc(defaultCalcValue);
       return;
     }
 
     if (input === "=") {
       if (newCalc.result === 0) newCalc.result = parseFloat(mainStr);
-      setPastEquations(
-        pastEquations.concat(
-          <div key={pastEquations.length} className="history">
-            <p>{mainStr}</p>
-            <p>= {newCalc.result}</p>
-          </div>
-        )
-      );
+      setPastEquations([
+        ...pastEquations,
+        <div key={pastEquations.length} className="history">
+          <p>{mainStr}</p>
+          <p>= {newCalc.result}</p>
+        </div>,
+      ]);
 
       if (newCalc.result !== 0) mainStr = newCalc.result.toString();
       newCalc.result = 0;
@@ -88,10 +83,12 @@ const PadBtn: React.FC<Props> = ({
       let numberToInvert = newCalc.nums[newCalc.nums.length - 1];
       mainStr = mainStr.slice(0, -1);
       if (newCalc.sign[newCalc.sign.length - 1] === "-") {
-        mainStr = mainStr.replace(/-([^-]*)$/, "+" + "$1");
+        const changeToPositive = mainStr.replace(/-([^-]*)$/, "+" + "$1");
+        mainStr = changeToPositive;
         newCalc.sign[newCalc.sign.length - 1] = "+";
       } else if (newCalc.sign[newCalc.sign.length - 1] === "+") {
-        mainStr = mainStr.replace(/\+([^+]*)$/, "-" + "$1");
+        const changeToNegative = mainStr.replace(/\+([^+]*)$/, "-" + "$1");
+        mainStr = changeToNegative;
         newCalc.sign[newCalc.sign.length - 1] = "-";
       } else {
         let invertedNumber = (parseFloat(numberToInvert) * -1).toString();
@@ -257,14 +254,15 @@ const PadBtn: React.FC<Props> = ({
   };
 
   return (
-    <button
-      onClick={updateCalculationState}
+    <li
       className={`button ${
         isNumber(input) ? "bg-gray-100" : input === "=" ? "bg-orange-300" : ""
       }`}
     >
-      {input.toString()}
-    </button>
+      <button className="btnPressArea" onClick={updateCalculationState}>
+        {input.toString()}
+      </button>
+    </li>
   );
 };
 
