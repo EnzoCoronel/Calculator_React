@@ -8,8 +8,7 @@ export type Calc = {
 export interface Props {
   input: string;
   calc: Calc;
-
-  setCalc: React.Dispatch<
-    React.SetStateAction<Calc>
-  >;
+  setCalc: React.Dispatch<React.SetStateAction<Calc>>;
+  pastEquations: JSX.Element[];
+  setPastEquations: React.Dispatch<React.SetStateAction<JSX.Element[]>>;
 }
