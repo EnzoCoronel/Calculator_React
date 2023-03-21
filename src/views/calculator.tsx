@@ -23,14 +23,16 @@ const Calculator = () => {
       <ul className="PadBtnGrid">
         {buttons.map((btnRole, index) => {
           return (
-            <PadBtn
-              key={index}
-              input={btnRole}
-              calc={calc}
-              setCalc={setCalc}
-              pastEquations={pastEquations}
-              setPastEquations={setPastEquations}
-            />
+            <li>
+              <PadBtn
+                key={index}
+                input={btnRole}
+                calc={calc}
+                setCalc={setCalc}
+                pastEquations={pastEquations}
+                setPastEquations={setPastEquations}
+              />
+            </li>
           );
         })}
       </ul>

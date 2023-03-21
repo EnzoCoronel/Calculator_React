@@ -83,12 +83,12 @@ const PadBtn: React.FC<Props> = ({
       let numberToInvert = newCalc.nums[newCalc.nums.length - 1];
       mainStr = mainStr.slice(0, -1);
       if (newCalc.sign[newCalc.sign.length - 1] === "-") {
-        const changeToPositive = mainStr.replace(/-([^-]*)$/, "+" + "$1");
-        mainStr = changeToPositive;
+        const replaceNegativeSign = /-([^-]*)$/;
+        mainStr = mainStr.replace(replaceNegativeSign,  "+" + "$1");
         newCalc.sign[newCalc.sign.length - 1] = "+";
       } else if (newCalc.sign[newCalc.sign.length - 1] === "+") {
-        const changeToNegative = mainStr.replace(/\+([^+]*)$/, "-" + "$1");
-        mainStr = changeToNegative;
+        const replacePositiveSign = /\+([^+]*)$/;
+        mainStr = mainStr.replace(replacePositiveSign, "-" + "$1");
         newCalc.sign[newCalc.sign.length - 1] = "-";
       } else {
         let invertedNumber = (parseFloat(numberToInvert) * -1).toString();
@@ -254,15 +254,14 @@ const PadBtn: React.FC<Props> = ({
   };
 
   return (
-    <li
+    <button
       className={`button ${
         isNumber(input) ? "bg-gray-100" : input === "=" ? "bg-orange-300" : ""
       }`}
+      onClick={updateCalculationState}
     >
-      <button className="btnPressArea" onClick={updateCalculationState}>
-        {input.toString()}
-      </button>
-    </li>
+      {input.toString()}
+    </button>
   );
 };
 

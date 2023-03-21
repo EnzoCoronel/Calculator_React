@@ -19,9 +19,6 @@
     @apply text-xl mr-6 mt-2;
   }
   .button{
-    @apply bg-gray-300  text-3xl rounded-full;
-  }
-  .btnPressArea{
-    @apply w-full h-full;
+    @apply bg-gray-300  text-3xl rounded-full w-full h-full;
   }
 }
